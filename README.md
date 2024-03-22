@@ -1,73 +1,75 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# NestJS BullMQ Project
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project demonstrates how to use BullMQ with Nest.js and deploy it to a Kubernetes cluster using Helm.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Prerequisites
 
-## Description
+- Docker
+- Node.js
+- Nest.js
+- Helm
+- Kubernetes cluster
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Getting Started
 
-## Installation
+1. Clone this repository:
 
-```bash
-$ npm install
+```sh
+git clone https://github.com/<username>/<repository>.git
 ```
 
-## Running the app
+2. Install the dependencies:
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+```sh
+cd <repository>
+npm install
 ```
 
-## Test
+3. Build the Docker image:
 
-```bash
-# unit tests
-$ npm run test
+````sh
+docker build -t <docker-username>/<docker-image>:<tag> .```
 
-# e2e tests
-$ npm run test:e2e
+````
 
-# test coverage
-$ npm run test:cov
+4. Push the Docker image to Docker Hub:
+
+```sh
+docker push <docker-username>/<docker-image>:<tag>
 ```
 
-## Support
+5. Create a Kubernetes secret for your Docker registry:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+   ```sh
+   kubectl create secret docker-registry regcred --docker-server=https://index.docker.io/v1/ --docker-username=<docker-username> --docker-password=<docker-password> --docker-email=<docker-email>
+   ```
 
-## Stay in touch
+   6. Create a Helm chart:
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+   ```sh
+   helm create <chart-name>
+   ```
 
-## License
+   7, Update the Helm chart with your application's configuration:
 
-Nest is [MIT licensed](LICENSE).
+   ```sh
+    helm install <release-name> <chart-name> --set image.repository=<docker-username>/<docker-image>,image.tag=<tag>,image.pullPolicy=Always,imagePullSecrets[0].name=regcred
+   ```
+
+   Replace <docker-username>, <docker-image>, <tag>, <redis-url>, <release-name>, and <release-name> with your own values.
+
+   8. Verify that your application is running in your Kubernetes cluster:
+
+      ```sh
+      kubectl get pods
+      ```
+
+   Replace <kubernetes-cluster-ip> and <node-port> with the IP address and NodePort of your Kubernetes service.
+
+Conclusion
+This project demonstrates how to use BullMQ with Nest.js and deploy it to a Kubernetes cluster using Helm. By following the steps in this README.md file, you should be able to build, push, and deploy your own Nest.js application with BullMQ to a Kubernetes cluster using Helm.
+
+```
+
+Please replace <username>, <repository>, <docker-username>, <docker-image>, <tag>, <secret-name>, <docker-server>, <docker-username>, <docker-password>, <docker-email>, <chart-name>, <release-name>, <kubernetes-cluster-ip>, and <node-port> with your own values.
+```
