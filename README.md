@@ -44,13 +44,13 @@ docker push <docker-username>/<docker-image>:<tag>
    kubectl create secret docker-registry regcred --docker-server=https://index.docker.io/v1/ --docker-username=<docker-username> --docker-password=<docker-password> --docker-email=<docker-email>
    ```
 
-   6. Create a Helm chart:
+6. Create a Helm chart:
 
    ```sh
    helm create <chart-name>
    ```
 
-   7, Update the Helm chart with your application's configuration:
+7. Update the Helm chart with your application's configuration:
 
    ```sh
     helm install <release-name> <chart-name> --set image.repository=<docker-username>/<docker-image>,image.tag=<tag>,image.pullPolicy=Always,imagePullSecrets[0].name=regcred
@@ -58,11 +58,11 @@ docker push <docker-username>/<docker-image>:<tag>
 
    Replace <docker-username>, <docker-image>, <tag>, <redis-url>, <release-name>, and <release-name> with your own values.
 
-   8. Verify that your application is running in your Kubernetes cluster:
+8. Verify that your application is running in your Kubernetes cluster:
 
-      ```sh
-      kubectl get pods
-      ```
+   ```sh
+   kubectl get pods
+   ```
 
    Replace <kubernetes-cluster-ip> and <node-port> with the IP address and NodePort of your Kubernetes service.
 
